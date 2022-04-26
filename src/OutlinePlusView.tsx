@@ -3,7 +3,7 @@ import { ItemView, WorkspaceLeaf } from "obsidian";
 import * as React from "react";
 import { Root, createRoot } from "react-dom/client";
 
-import { ReactView } from "./ReactView";
+import { ReactView, StateChanger } from "./ReactView";
 
 export const VIEW_TYPE_EXAMPLE = "example-view";
 
@@ -24,7 +24,12 @@ export class OutlinePlusView extends ItemView {
 
 	async onOpen() {
 		this.root = createRoot(this.getContainer());
-		this.root.render(<ReactView />);
+		const stateChanger = new StateChanger();
+		this.root.render(<ReactView stateChanger={stateChanger} />);
+
+		setInterval(() => {
+			stateChanger.setState(new Date().toLocaleTimeString());
+		}, 1000);
 	}
 
 	async onClose() {
